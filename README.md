@@ -14,8 +14,8 @@ Raw Data                             | [All Data](AllData_Uncleaned.xlsx)
 &nbsp;                               | [Maternal Measures](Regeneration.csv)
 &nbsp;                               | [Hatchling Measures](Hatchling_Measures.csv)
 &nbsp;                               | [Diet Measures](maternal.mass.csv)
-Statistical Code                     | [Code](Regeneration_publication.code.final.Rmd)
-&nbsp;                               | [Code output](Regeneration_publication.code.final.html)
+Statistical Code                     | [Code](Regneration_publication.code.final.Rmd)
+&nbsp;                               | [Code output](Regneration_publication.code.final.html)
 
 
 ## Supplementary Methodology and Results: 
