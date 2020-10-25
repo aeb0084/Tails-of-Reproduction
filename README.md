@@ -18,7 +18,7 @@ Statistical Code                     | [Code](Regeneration_publication.code.fina
 &nbsp;                               | [Code output](Regeneration_publication.code.final.html)
 
 
-## Methodology: 
+## Supplementary Methodology and Results: 
 
 ### General Husbandry 
 Adult A. sagrei lizards (n = 48 females, n = 54 males) were collected from Palm Coast, Florida in April of 2018. The lizards were transported to Auburn University in Auburn, AL and acclimated to experimental conditions for three weeks (**Supp. Fig.1**). Each lizard was housed individually in a cage (15.25”L x 11.5”W x 11.75” H) on a 12:12 hour light/dark cycle at ~29°C in a temperature controlled room. Experimental conditions mimicked summer temperatures at the collection site, stimulating breeding and egg production.  Each cage contained reptile cage carpet, two bamboo perches, artificial greenery, and a nesting pot filled with a ~1:1 ratio of soil and peat moss. Lizards were provided UV illumination with Arcadia D3 + 12% UVB T5 Bulbs (Reptile Basics). 
