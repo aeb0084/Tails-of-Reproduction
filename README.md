@@ -9,7 +9,7 @@ This repository holds all supplemental files for "Tails of Reproduction:  Regene
 ### Quick Key to File Directory: Detailed Descriptions of file use can be found below.
 File Type | &nbsp;
 ------------------------------------ | -----------------------------------------------------
-Supplemental Methods and Result      | [Supp Methods](Supplemental_Methods_and_Results.docx) 
+Supplemental Methods and Results      | [Supp Methods](Supplemental_Methods_and_Results.docx) 
 Raw Data                             | [All Data](AllData_Uncleaned.xlsx)
 &nbsp;                               | [Maternal Measures](Regeneration.csv)
 &nbsp;                               | [Hatchling Measures](Hatchling_Measures.csv)
