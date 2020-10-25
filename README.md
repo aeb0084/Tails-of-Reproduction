@@ -106,3 +106,4 @@ plot=ggplot(data=dat, aes(x=Independent_Variable, y=Dependent_Variable, fill=Ind
 geom_boxplot(width=0.2, color="black") + geom_point (position=dodge, shape=1) + scale_fill_manual(values= c('gray62','darkslategray', 'darkseagreen2')) +
   xlab('x_IndependentVariable_Title') +
   ylab('y_DependentVariable_Title')
+```
