@@ -18,16 +18,22 @@ Statistical Code                     | [Code](Regeneration_publication.code.fina
 &nbsp;                               | [Code output](Regeneration_publication.code.final.html)
 
 ## Supplemental Figures and Tables 
-
+<pre>
 ![Supplemental Figure 1](SFig1_Github.png)
+
 
 ![Supplemental Figure 2](SFig2_Github.png) 
 
+
 ![Supplemental Figure 3](SFig3_Github.png) 
+
 
 ![Supplemental Figure 4](SFig4_Github.png)
 
+
 ![Supplemental Table 1](STable1_Github.png) 
+
+</pre>
 
 ## Methodology: 
 
@@ -35,7 +41,7 @@ Statistical Code                     | [Code](Regeneration_publication.code.fina
 Adult A. sagrei lizards (n = 48 females, n = 54 males) were collected from Palm Coast, Florida in April of 2018. The lizards were transported to Auburn University in Auburn, AL and acclimated to experimental conditions for three weeks (**Supp. Fig.1**). Each lizard was housed individually in a cage (15.25”L x 11.5”W x 11.75” H) on a 12:12 hour light/dark cycle at ~29°C in a temperature controlled room. Experimental conditions mimicked summer temperatures at the collection site, stimulating breeding and egg production.  Each cage contained reptile cage carpet, two bamboo perches, artificial greenery, and a nesting pot filled with a ~1:1 ratio of soil and peat moss. Lizards were provided UV illumination with Arcadia D3 + 12% UVB T5 Bulbs (Reptile Basics). 
 
 ### Resource-limited Control Diet  
-All lizards were acclimated to a resource limited diet of two crickets (relative to ad lib of 5 crickets weekly), supplemented with vitamin and calcium dust, twice weekly.  This led to the halt of reproduction in eleven (of 40 females) females. For these individuals, food supply was increased to 5 crickets per week, however, they did not resume reproduction. In order to not compound tradeoffs due to diet restriction with those due to tail regeneration, individuals that stopped reproduction due to diet restriction were excluded from the study, adjusting the sample size to N=30. The [data depicting results of weight loss](maternal.mass.csv)show that the limited diet decreased the mean (F = 3.70; p = 0.06) and variance (var = 4.96; p = 0.002) of maternal mass before the experimental period (**Supp. Fig. 3A**). There were no differences in [maternal mass](Regeneration.csv (F = 0.018; p = 0.89) and [snout-vent length](Regeneration.csv) (SVL) (F = 0.85; p = 0.36) between treatments at the time of tail autotomy. Additionally, there was no difference in percent weight loss between treatments over the study period (F = 0.19; p = 0.66; **Supp. Fig. 3B** & **Supp. Fig. 3C**).
+All lizards were acclimated to a resource limited diet of two crickets (relative to ad lib of 5 crickets weekly), supplemented with vitamin and calcium dust, twice weekly.  This led to the halt of reproduction in eleven (of 40 females) females. For these individuals, food supply was increased to 5 crickets per week, however, they did not resume reproduction. In order to not compound tradeoffs due to diet restriction with those due to tail regeneration, individuals that stopped reproduction due to diet restriction were excluded from the study, adjusting the sample size to N=30. The [data depicting results of weight loss](maternal.mass.csv) show that the limited diet decreased the mean (F = 3.70; p = 0.06) and variance (var = 4.96; p = 0.002) of maternal mass before the experimental period (**Supp. Fig. 3A**). There were no differences in [maternal mass](Regeneration.csv (F = 0.018; p = 0.89) and [snout-vent length](Regeneration.csv) (SVL) (F = 0.85; p = 0.36) between treatments at the time of tail autotomy. Additionally, there was no difference in percent weight loss between treatments over the study period (F = 0.19; p = 0.66; **Supp. Fig. 3B** & **Supp. Fig. 3C**).
 
 ### Experimental Design 
 We used females that had no evidence of prior tail loss or regeneration. Females were randomly assigned to one of two treatment groups, Control and Autotomy (n=14 and n=15 respectively; **Supp. Table 1**) female body size was not different between groups (mass p = 0.892; SVL p = 0.448). One female assigned to the control group died of natural causes, decreasing the sample size to n=13 individuals at the start of the experiment. Males can store sperm for many months, but to ensure a supply of sperm through the experiment, males (N=10) were randomly assigned as a mate to a set of three females.  Females were strategically assigned a shelf-location based on their mate, alternating Control and Autotomy females. During both the acclimation period and the experimental period, to ensure each female had a supply of sperm for egg fertilization, a mate was provided to each female once every 14 days for 24 hours. Males were housed separately from females at all other times so they would not compete with the females for resources. Males were always removed before feeding.  Death over the experimental period lead to Control and Autotomy samples sizes of n=13 and n=15 respectively. Individuals with partial regeneration period collections were used in analyses.
