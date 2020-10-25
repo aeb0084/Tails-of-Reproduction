@@ -17,21 +17,6 @@ Raw Data                             | [All Data](AllData_Uncleaned.xlsx)
 Statistical Code                     | [Code](Regeneration_publication.code.final.Rmd)
 &nbsp;                               | [Code output](Regeneration_publication.code.final.html)
 
-## Supplemental Figures and Tables 
-![Supplemental Figure 1](SFig1_Github.png)
-
-
-![Supplemental Figure 2](SFig2_Github.png) 
-
-
-![Supplemental Figure 3](SFig3_Github.png) 
-
-
-![Supplemental Figure 4](SFig4_Github.png)
-
-
-![Supplemental Table 1](STable1_Github.png) 
-
 
 ## Methodology: 
 
@@ -65,6 +50,20 @@ The statistical analyses were performed in R (version 3.5.1) using [code](Regene
 ### Estimating Maternal Age
 Females were wild caught animals and we were unable to account for age during regeneration. It is possible that there are differential strategies of investment in these two processes to maximize lifelong fitness. The use of wild animals in this study means that all study individuals had been exposed to biologically relevant stressors related to the necessity of tail regeneration, such as predation. While we cannot be sure about the age of the experimental animals, previously collected data from wild caught animals was used to estimate age. Based on their size, it was estimated that 28 of the females were one year of age (first year of reproduction), while 2 individuals were likely two years of age. This makes it unlikely that the variation in our results is due to age alone. 
 
-
-
+## Supplemental Figures and Tables 
+![Supplemental Figure 1](SFig1_Github.png, height=48px)  
+&nbsp; 
+&nbsp; 
+![Supplemental Figure 2](SFig2_Github.png) 
+&nbsp; 
+&nbsp; 
+![Supplemental Figure 3](SFig3_Github.png) 
+&nbsp; 
+&nbsp; 
+![Supplemental Figure 4](SFig4_Github.png)
+&nbsp; 
+&nbsp; 
+![Supplemental Table 1](STable1_Github.png) 
+&nbsp; 
+&nbsp; 
 
