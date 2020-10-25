@@ -44,9 +44,7 @@ Adult A. sagrei lizards (n = 48 females, n = 54 males) were collected from <img 
 
 &nbsp; 
 
-&nbsp; 
 
-&nbsp; 
 
 ### Experimental Design 
 <img align="right" src="STable1_Github.png" width="450"> We used females that had no evidence of prior tail loss or regeneration. Females were randomly assigned to one of two treatment groups, Control and Autotomy (n=14 and n=15 respectively; **Supp. Table 1**) female body size was not different between groups (mass p = 0.892; SVL p = 0.448). One female assigned to the control group died of natural causes, decreasing the sample size to n=13 individuals at the start of the experiment. Males can store sperm for many months, but to ensure a supply of sperm through the experiment, males (N=10) were randomly assigned as a mate to a set of three females.  Females were strategically assigned a shelf-location based on their mate, alternating Control and Autotomy females. During both the acclimation period and the experimental period, to ensure each female had a supply of sperm for egg fertilization, a mate was provided to each female once every 14 days for 24 hours. Males were housed separately from females at all other times so they would not compete with the females for resources. Males were always removed before feeding.  Death over the experimental period lead to Control and Autotomy samples sizes of n=13 and n=15 respectively. Individuals with partial regeneration period collections were used in analyses.
