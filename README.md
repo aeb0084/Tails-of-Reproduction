@@ -75,7 +75,7 @@ Linear mixed models were used to test for differences in reproductive investment
 
 The statistical analyses were performed in R (version 3.5.1) using [downloadable code](Regeneration_publication.code.final.Rmd) in an R Markdown format. [Code output](Regeneration_publication.code.final.html) displays all statistical models, results, and figures produced. Note, you will have to download the HTML file to visualize the data output. 
 
-Examples of required packages, statistical models, and plots used can be seen below: 
+Examples of required packages, statistical models, and plots used can be seen below. Note: These are generalized examples produced for ease of adaptation. [Downloadable code](Regeneration_publication.code.final.Rmd) contains the specific models used for publication, and the output can be found in the [Code output](Regeneration_publication.code.final.html).
 
 ```ruby
 #Required Packages
