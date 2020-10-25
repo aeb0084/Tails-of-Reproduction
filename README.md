@@ -95,11 +95,11 @@ model=(lme(Dependent_Variable~Independent_Variable, data=dat, na.action=na.omit,
 anova(model)
 
 #Run EmMeans package to get pairwise comparisons of Independent Variables (Times or Treatments)
-model.emmeans=emmeans(model, list(pairwise ~ Independent_Variable), adjust = "tukey")
+model.em=emmeans(model, list(pairwise ~ Independent_Variable), adjust = "tukey")
 #Report adjusted means and P-values
-model.emmeans
+model.em
 #Report confidence intervals from EmMeans model
-confint(model.emmeans)
+confint(model.em)
 
 #Graph patterns using ggplot2 package
 plot=ggplot(data=dat, aes(x=Independent_Variable, y=Dependent_Variable, fill=Independent_Variable)) + geom_violin(trim=F) + 
