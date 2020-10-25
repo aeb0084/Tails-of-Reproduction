@@ -72,9 +72,9 @@ Reproductive investment was first analyzed across the eight-week time period for
 
 Linear mixed models were used to test for differences in reproductive investment between treatment groups. Maternal ID was included as a covariate in all models. The loadings of hatchling size PC1, which was termed “hatchling size”, and relative egg mass were used in linear models testing for differences in the two regeneration rate periods (High and Low) for the Autotomy group and the Control group. Tukey-based post-hoc analyses were performed to compare each of the regeneration status groups to the Control group. Correlations were run between maternal measures, including regeneration rate and mass, as well as offspring measures with maternal mass.
 
-The statistical analyses were performed in R (version 3.5.1) using [downloadable code](Regeneration_publication.code.final.Rmd) in an R Markdown format. [Code output](Regeneration_publication.code.final.html) displays all statistical models, results, and figures produced. Note, you will have to download the HTML file to visualize the data output. 
+The statistical analyses were performed in R (version 3.5.1) using [downloadable code](Regneration_publication.code.final.Rmd) in an R Markdown format. [Code output](Regneration_publication.code.final.html) displays all statistical models, results, and figures produced. Note, you will have to download the HTML file to visualize the data output. 
 
-Examples of required packages, statistical models, and plots used can be seen below. Note: These are generalized examples produced for ease of adaptation. [Downloadable code](Regeneration_publication.code.final.Rmd) contains the specific models used for publication, and the output can be found in the [Code output](Regeneration_publication.code.final.html).
+Examples of required packages, statistical models, and plots used can be seen below. Note: These are generalized examples produced for ease of adaptation. [Downloadable code](Regneration_publication.code.final.Rmd) contains the specific models used for publication, and the output can be found in the [Code output](Regneration_publication.code.final.html).
 
 ```ruby
 #Required Packages
