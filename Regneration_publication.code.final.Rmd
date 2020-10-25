@@ -1,0 +1,632 @@
+---
+title: "Regeneration.Reproduction.Publication.Code"
+output:
+  html_document:
+    df_print: paged
+  html_notebook: default
+  pdf_document: default
+---
+
+###Read in main data files
+```{r, echo=T, message=F, warning=F, results='hide'}
+library(multcomp)
+library(ggplot2)
+library(nlme)
+library(grid)
+library(Rmisc)
+library(gridExtra)
+library(emmeans)
+library(cowplot)
+
+pd <- position_dodge(0.02)
+dodge <- position_dodge(width = 0.8)
+```
+
+#Summary Function
+```{r}
+summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=TRUE,
+                      conf.interval=.95, .drop=TRUE) {
+    library(plyr)
+    # New version of length which can handle NA's: if na.rm==T, don't count them
+    length2 <- function (x, na.rm=TRUE) {
+        if (na.rm) sum(!is.na(x))
+        else       length(x)
+    }
+    # This does the summary. For each group's data frame, return a vector with
+    # N, mean, and sd
+    datac <- ddply(data, groupvars, .drop=.drop,
+      .fun = function(xx, col) {
+        c(N    = length2(xx[[col]], na.rm=na.rm),
+          mean = mean   (xx[[col]], na.rm=na.rm),
+          sd   = sd     (xx[[col]], na.rm=na.rm)
+        )
+      },
+      measurevar
+    )
+    # Rename the "mean" column    
+    datac <- rename(datac, c("mean" = measurevar))
+    datac$se <- datac$sd / sqrt(datac$N)  # Calculate standard error of the mean
+    # Confidence interval multiplier for standard error
+    # Calculate t-statistic for confidence interval: 
+    # e.g., if conf.interval is .95, use .975 (above/below), and use df=N-1
+    ciMult <- qt(conf.interval/2 + .5, datac$N-1)
+    datac$ci <- datac$se * ciMult
+    return(datac)
+    }
+
+```
+
+#Diet Restirction Tests:
+
+```{r}
+#Make sure no differences in size at the beginning of the experiment (week 0 only)
+
+comp=read.csv("Regeneration.csv")
+comp_0=subset(comp, Week == "0")
+anova(lm(Mat_Mass~Treatment, data=comp_0))
+
+anova(lm(SVL~Treatment, data=comp_0))
+
+#Create a data frame that determines Percent weight loss over the study, showing that diet held steady 
+
+diet=read.csv("maternal.mass.csv")
+
+anova(lm(Loss~Week+Treatment, data=diet))
+wl=ggplot(diet, aes(x=Treatment, y=Loss)) +
+        geom_boxplot() +
+        geom_jitter(width = 0.1) +
+        theme(legend.position = "none") +
+        ylab("% Weight Loss") +
+        xlab("Treatment")
+
+wlb=ggplot(diet, aes(x=as.factor(Week), y=Loss, fill=Treatment)) +
+        geom_boxplot() + geom_point(position=dodge) +
+        scale_fill_manual(values= c('black', 'white')) +
+        theme(legend.position = "none") +
+        ylab("% Weight Loss") +
+        xlab("Week")
+
+#Show that there was weight loss implemented before the experiment began and decreased variation in weight
+rest=read.csv("Diet_Restriction.csv")
+
+var.test(Weight~Time,
+    data=rest, na.action=na.omit,alternatie= "two.sided")
+anova(lm(Weight~Time, data=rest, na.action = na.omit))
+
+rest.pl=ggplot(rest, aes(x=Time, y=Weight)) +
+        geom_boxplot() + geom_jitter(width= 0.1) +
+        theme(legend.position = "none") +
+        ylab("Mass (g)") +
+        xlab("Diet Type")
+
+p.pre=ggdraw() +
+  draw_plot(wl, x = 0, y = 0.33, width = 1, height = .28) +
+  draw_plot(wlb, x = 0, y = 0.0, width = 1, height = .28) +
+  draw_plot(rest.pl, x = 0, y = 0.66, width = 1, height = .28) 
+
+ggsave(p.pre, file="Supp_Fig_1_Diet.png", width=4, height=8, dpi=300)
+
+p.pre
+```
+
+#Regneration Plotting: Does investment in regeneration change over the 8 week period
+```{r}
+#Read in data set where data is averaged across maternal ID in weekly intervals
+
+#Design a new dataframe that is subsetted to include only the indivdiuals that underwent tail autotomy, and subset that data set to be timepoints after the implementation of treatment.
+(reg <- comp[comp$Treatment == 'Autotomy', ])
+reg <- subset(reg, Week >= 0)
+#change the Regeneration measurements to be read as an integer 
+reg$Regen <- as.integer(reg$Regen)
+      
+
+#Run linear model showing that there is a statistical difference in the amount of tail regeneration across time
+anova(lme(Regeneration~as.factor(Day),
+    data=reg, na.action=na.omit, random=~1|ID))
+
+#Determine mean regernation rate at each time point 
+tapply(reg$Regeneration, list(reg$Week), mean, na.rm=TRUE)
+
+#Determine the mean cumulative amount at each timepoint to calculate the percentage of reneration at each time point
+tapply(reg$RegLength, list(reg$Week), mean, na.rm=TRUE)
+
+
+#create plot showing the regneration pattern (treatment individuals only) within treatment individuals over time (Days 0-70, which are the days through which eggs were collected)  
+plot1=ggplot(reg, aes(x=Week, y=as.integer(Regeneration))) +
+        geom_smooth( color = "aquamarine4") +
+        theme(axis.title.x = element_blank(),
+            legend.position = "none",
+            axis.title.y = element_text(size = 8),
+            axis.text.y = element_text(size = 7), 
+            axis.text.x = element_blank()) +
+        ylab("Tail Regeneration (mm)")
+    
+
+
+##Plot as a boxplot to explain why we chose the timepoints we did as investment and recovery 
+reg_box=subset(reg, Week != "0")
+
+plot1b=ggplot(reg_box, aes(x=as.factor(Time), y=as.integer(Regeneration), fill=Status)) +
+        geom_boxplot(outlier.shape=NA) +
+        scale_fill_manual(values=c("darkslategrey", "darkseagreen2")) +
+        geom_jitter(width = 0.1, size=1) +
+        theme(legend.position = "none") +
+        ylab("Regeneration Rate (mm/2w)") +
+        xlab("Week") +
+        ylim(0, 16)
+
+ggsave(plot1b, file="Supp_Fig_2_RegenBox.png", width=8, height=4, dpi=300)
+
+plot1b
+
+```
+
+#Part 1: Does invenstment in reproduction change over the 8 week period. Prediction larger effect in first four weeks based on regeneration graph. Different data set
+```{r}
+
+egg.numb=(lme(Egg_Number~Treatment,
+    data=comp, na.action=na.omit, random=~1|ID))
+anova(egg.numb)
+
+inc=(lme(Incubation~Treatment,
+    data=comp, na.action = na.omit, random = ~1|ID))
+anova(inc)
+
+eggmass=(lme(Egg_Mass~Treatment,
+    data=comp, na.action = na.omit, random = ~1|ID))
+anova(eggmass)
+
+surv=(lme(Survival~Treatment,
+    data=comp, na.action=na.omit, random=~1|ID))
+anova(surv)
+
+sex=(lme(Sex~Treatment,
+    data=comp, na.action=na.omit, random=~1|ID))
+anova(sex)
+
+#Hatchling SVL
+plot.SVL2=ggplot(comp, aes(x=Week, y=SVL, colour=Treatment, group=Treatment)) +
+        geom_smooth(method=loess)+   
+        scale_color_manual(values=c("aquamarine4", "black"))+
+       theme(legend.position = "none",
+            axis.title.y = element_text(size = 8),
+            axis.text.y=element_text(size=7))+
+        ylab("Hatchling SVL (mm)") +
+        xlab("Week")
+
+#Hatchling Mass
+
+plot.mass2=ggplot(comp, aes(x=Week, y=Mass, colour=Treatment, group=Treatment)) +
+        geom_smooth(method=loess)+   
+        scale_color_manual(values=c("aquamarine4", "black"))+
+       theme(axis.title.x = element_blank(),
+            legend.position = "none",
+            axis.title.y = element_text(size = 8),
+            axis.text.y=element_text(size=7),
+            axis.text.x = element_blank())+
+        ylab("Hatchling Mass (g)")
+
+#Egg Mass
+plot.Eggmass2=ggplot(comp, aes(x=Week, y=Egg_Mass, colour=Treatment, group=Treatment)) +
+        geom_smooth(method=loess)+   
+        scale_color_manual(values=c("aquamarine4", "black"))+
+       theme(axis.title.x = element_blank(),
+            legend.position = "none",
+            axis.title.y = element_text(size = 8),
+            axis.text.y=element_text(size=7),
+                        axis.text.x = element_blank())+
+        ylab("Egg Mass (g)")
+
+#multiplot(plot.SVL2, plot.mass2, plot.Eggmass2, cols=1)
+
+plot1c=ggplot(reg, aes(x=Week, y=as.integer(Regeneration))) +
+        geom_smooth( color = "aquamarine4") +
+        theme(axis.title.x = element_blank(),
+            legend.position = "none",
+            axis.title.y = element_text(size = 8),
+            axis.text.y = element_text(size = 7), 
+            axis.text.x = element_blank()) +
+        ylab("Regeneration Rate (mm/2w)")
+
+
+```
+
+#Part 2: Over the total time for regeneration, is there an effect on reproductive investment?
+```{r}
+hatch=read.csv("Hatchling_Measures.csv")
+hatch=subset(hatch, Day >= 8)
+hatch$Mass<-as.numeric(as.character(hatch$Mass))
+hatch$Egg_Mass=as.numeric(as.character(hatch$Egg_Mass))
+
+##Run linear models to determine if there is a statistical difference between the treatment groups over the entire eight week period
+anova(lme(SVL~Treatment,
+    data=hatch, na.action=na.omit, random=~1|ID))
+anova(lme(Mass~Treatment,
+    data=hatch, na.action=na.omit, random=~1|ID))
+anova(lme(Egg_Mass~Treatment,
+    data=hatch, na.action=na.omit, random=~1|ID))
+anova(lme(Relative.Mass~Treatment,
+    data=hatch, na.action=na.omit, random=~1|ID))
+anova(lme(Relative.Egg~Treatment,
+    data=hatch, na.action=na.omit, random=~1|ID))
+
+##Determine if there is a difference in variance between treatments
+var.test(SVL~Treatment,
+    data=hatch, na.action=na.omit,alternatie= "two.sided")
+var.test(Mass~Treatment,
+    data=hatch, na.action=na.omit,alternatie= "two.sided")
+var.test(Egg_Mass~Treatment,
+    data=hatch, na.action=na.omit,alternatie= "two.sided")
+var.test(Relative.Mass~Treatment,
+    data=hatch, na.action=na.omit,alternatie= "two.sided")
+var.test(Relative.Egg~Treatment,
+    data=hatch, na.action=na.omit,alternatie= "two.sided")
+
+##plot the two treatments as boxplots to compare total values
+pl.a=ggplot(data=hatch, aes(x=Treatment, y=SVL)) + 
+geom_boxplot() + geom_point (position=dodge) +
+  xlab('Treatment') +
+  ylab('Hatchling SVL')
+
+pl.b=ggplot(data=hatch, aes(x=Treatment, y=Mass)) + 
+geom_boxplot() + geom_point (position=dodge) +
+  xlab('Treatment') +
+  ylab('Hatchling Mass') +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank())
+
+pl.c=ggplot(data=hatch, aes(x=Treatment, y=Egg_Mass)) + 
+geom_boxplot() + geom_point (position=dodge) +
+  xlab('Treatment') +
+  ylab('Egg Mass') +
+theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank())
+
+pl.d=ggplot(data=hatch, aes(x=Treatment, y=Relative.Mass)) + 
+geom_boxplot() + geom_point (position=dodge) +
+  xlab('Treatment') +
+  ylab('Relative Mass') +
+theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank())
+
+pl.d2=ggplot(data=hatch, aes(x=Treatment, y=Relative.Egg)) + 
+geom_boxplot() + geom_point (position=dodge) +
+  xlab('Treatment') +
+  ylab('Relative Egg Mass (g)') +
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank())
+```
+
+#Part 3: Test PCA of correlation measures
+```{r}
+
+PCA=hatch[complete.cases(hatch),]
+PCA$Egg_Mass=as.numeric(as.character(PCA$Egg_Mass))
+PCA$Status <- factor(PCA$Status , levels=c("Low", "High", "Control"))
+
+
+cor.test(PCA$SVL, PCA$Mass)
+cor.test(PCA$SVL, PCA$Relative.Mass)
+
+off.meas.pr=princomp(PCA[19:20], cor=T, scores=TRUE)
+summary(off.meas.pr, loadings=T)
+
+library("ggfortify")
+PCA.pl=autoplot(off.meas.pr, loadings= T, loadings.label=T)
+
+PCA=cbind(PCA, off.meas.pr$scores)
+PCA.aut=subset(PCA, Treatment == "Autotomy")
+
+hatch.size=(lme(Comp.1~Status,data=PCA, na.action=na.omit, random=~1|MaternalID))
+anova(hatch.size)
+hatchsize.em=emmeans(hatch.size, list(pairwise ~ Status), adjust = "tukey")
+hatchsize.em
+confint(hatchsize.em)
+
+pl.PC=ggplot(data=PCA.aut, aes(x=Status, y=Comp.1, fill=Status)) + 
+geom_boxplot() + geom_point (position=dodge) +
+  xlab('Status') +
+  ylab('Hatchling Size (PC1)')+
+  theme(legend.position = "none")
+
+ggsave(PCA.pl, file="Supp_Fig_4_PCA.inv.png", width=8, height=8, dpi=300)
+PCA.pl
+
+```
+
+#Part 4: Subset Based on Status. Because longitudinal data did not have much power, to test observations we subset data into investment and recovery periods defined as... 
+
+```{r}
+hatch=read.csv("Hatchling_Measures.csv")
+hatch=subset(hatch, Day >= 8)
+hatch$Mass<-as.numeric(as.character(hatch$Mass))
+hatch$Egg_Mass=as.numeric(as.character(hatch$Egg_Mass))
+
+  #Investment time periods were chosen from the tail regeneration graph, as up through week 4. Days 1-7 were excluded because eggs may have been invested pre-autotomy
+  #Recovered was considered to be all timepoints after week 4 (day 28), where regeneration had all but stopped
+
+svl.hatch=(lme(SVL~Status,
+    data=hatch, na.action=na.omit, random=~1|MaternalID))
+anova(svl.hatch)
+svl.em=emmeans(svl.hatch, list(pairwise ~ Status), adjust = "tukey")
+svl.em
+confint(svl.em)
+
+mass.hatch=(lme(Mass~Status,
+    data=hatch, na.action=na.omit, random=~1|MaternalID))
+anova(mass.hatch)
+mass.em=emmeans(mass.hatch, list(pairwise ~ Status), adjust = "tukey")
+mass.em
+confint(mass.em)
+
+eggmass.hatch=(lme(Egg_Mass~Status,
+    data=hatch, na.action=na.omit, random=~1|MaternalID))
+anova(eggmass.hatch)
+emass.em=emmeans(eggmass.hatch, list(pairwise ~ Status), adjust = "tukey")
+emass.em
+confint(emass.em)
+
+relmass.hatch=(lme(Relative.Mass~Status,
+    data=hatch, na.action=na.omit, random=~1|MaternalID))
+anova(relmass.hatch)
+relmass.em=emmeans(relmass.hatch, list(pairwise ~ Status), adjust = "tukey")
+relmass.em
+confint(relmass.em)
+
+releggmass.hatch=(lme(Relative.Egg~Status,
+    data=hatch, na.action=na.omit, random=~1|MaternalID))
+anova(releggmass.hatch)
+releggmass.em=emmeans(releggmass.hatch, list(pairwise ~ Status), adjust = "tukey")
+releggmass.em
+confint(releggmass.em)
+
+hatch.aut=subset(hatch, Treatment == "Autotomy")
+
+m1=(lme(SVL~Status,data=hatch.aut, na.action=na.omit, random=~1|MaternalID))
+anova(m1)
+intervals(m1)
+
+m2=(lme(Mass~Status,data=hatch.aut, na.action=na.omit, random=~1|MaternalID))
+anova(m2)
+intervals(m2)
+
+m3=(lme(Egg_Mass~Status,data=hatch.aut, na.action=na.omit, random=~1|MaternalID))
+anova(m3)
+intervals(m3)
+
+m4=(lme(Relative.Mass~Status,data=hatch.aut, na.action=na.omit, random=~1|MaternalID))
+anova(m4)
+intervals(m4)
+
+m5=(lme(Relative.Egg~Status,data=hatch.aut, na.action=na.omit, random=~1|MaternalID))
+anova(m5)
+intervals(m5)
+
+pla=ggplot(data=hatch.aut, aes(x=Status, y=SVL, fill=Status)) + 
+geom_boxplot() + geom_point (position=dodge) +
+  xlab('Status') +
+  ylab('Hatchling SVL')+
+  theme(legend.position = "none")
+
+plb=ggplot(data=hatch.aut, aes(x=Status, y=Mass, fill=Status)) + 
+geom_boxplot() + geom_point (position=dodge) +
+  xlab('Status') +
+  ylab('Hatchling Mass')+
+  theme(axis.title.x = element_blank(),
+        axis.text.x= element_blank(), 
+        legend.position = "none")
+
+plc=ggplot(data=hatch.aut, aes(x=Status, y=Egg_Mass, fill=Status)) +
+geom_boxplot() + geom_point (position=dodge) +
+  xlab('Status') +
+  ylab('Egg Mass') +
+  theme(axis.title.x = element_blank(),
+        axis.text.x= element_blank(),
+        legend.position = "none")
+
+
+ple=ggplot(data=hatch.aut, aes(x=Status, y=((Relative.Mass)), fill=Status)) +
+geom_boxplot() + geom_point (position=dodge) +
+  xlab('Status') +
+  ylab('Relative Hatchling Mass') +
+  theme(axis.title.x = element_blank(),
+        axis.text.x= element_blank(),
+        legend.position = "none")
+
+pld=ggplot(data=hatch.aut, aes(x=Status, y=((Relative.Egg)), fill=Status)) + geom_boxplot() + geom_point (position=dodge) +
+  xlab('Status') +
+  ylab('Relative Egg Mass (g)') +
+  theme(axis.title.x = element_blank(),
+        axis.text.x= element_blank(),
+        legend.position = "none")
+
+ple.2=ggplot(data=hatch.aut, aes(x=Status, y=((Relative.SVL)), fill=Status)) + geom_boxplot() + geom_point (position=dodge) +
+  xlab('Status') +
+  ylab('Relative SVL') +
+  theme(legend.position = "none")
+
+
+
+p.4=ggdraw() +
+  draw_plot(plc, x = 0, y = 0, width = 1, height = .2) +
+  draw_plot(pld, x = 0, y = 0.2, width = 1, height = .2) +
+  draw_plot(plb, x =0, y = 0.4, width = 1, height = .2) +
+  draw_plot(ple, x =0, y = 0.6, width = 1, height = .2) +
+  draw_plot(pla, x = 0, y = 0.8, width = 1, height = .2)
+
+
+  
+##Save the image as a png file with predefined dimensions. Add the dpi value to export it as publication quality. 
+ggsave(p.4, file="sub.status.png", width=5, height=10, dpi=300)
+
+
+p.4b=ggdraw() +
+  draw_plot(pla, x = 0, y = 0, width = 0.5, height = .33) +
+  draw_plot(plb, x = 0, y = 0.33, width = 0.5, height = .33) +
+  draw_plot(plc, x =0, y = 0.66, width = 0.5, height = .33) +
+  draw_plot(ple.2, x =0.5, y = 0, width = 0.5, height = .33) +
+  draw_plot(ple, x =0.5, y = 0.33, width = 0.5, height = .33) +
+  draw_plot(pld, x = 0.5, y = 0.66, width = 0.5, height = .33)
+
+
+pl.PC=ggplot(data=PCA, aes(x=Status, y=Comp.1, fill=Status)) + geom_violin(trim=F) + 
+geom_boxplot(width=0.2, color="black") + geom_point (position=dodge, shape=1) + scale_fill_manual(values= c('gray62','darkslategray', 'darkseagreen2')) +
+  xlab('Status') +
+  ylab('Hatchling Size (PC1)')+
+  theme(axis.title.x = element_blank(),
+        axis.text.x= element_blank(),
+        legend.position = "none")
+
+
+pld2=ggplot(data=hatch, aes(x=Status, y=((Relative.Egg)), fill=Status)) + geom_violin(trim=F)  + geom_boxplot(width=0.2, color="black") + geom_point(position=dodge, shape=1) + scale_fill_manual(values= c('gray62','darkslategray', 'darkseagreen2')) + 
+  xlab('Regeneration Rate Status') +
+  ylab('Relative Egg Mass (g)') +
+  theme(legend.position = "none")
+
+p.4c=ggdraw() +
+  draw_plot(pl.PC, x =0.0, y = 0, width = 0.5, height = 1) +
+  draw_plot(pld2, x = 0.5, y = 0, width = 0.5, height = 1)
+
+##See next section for figure output
+
+```
+
+#Part 5: Mass of hatchlings is bigger if they are laid when females are investing more in regeneration. This is confounded with a few correlations shown below. 
+
+```{r}
+##split data files by treatment to seperate correlation factors
+comp_Auto=comp[comp$Treatment == 'Autotomy', ]
+comp_cont=comp[comp$Treatment == 'Control', ]
+
+cor.test(comp$Mass, comp$Regeneration)
+cor.test(comp$Mat_Mass, comp$Regeneration)
+
+
+cor.test(comp$Mat_Mass, comp$Egg_Mass)
+cor.test(comp_Auto$Mat_Mass, comp_Auto$Egg_Mass)
+cor.test(comp_cont$Mat_Mass, comp_cont$Egg_Mass)
+
+cor.test(comp$Mat_Mass, comp$Mass)
+cor.test(comp_Auto$Mat_Mass, comp_Auto$Mass)
+cor.test(comp_cont$Mat_Mass, comp_cont$Mass)
+
+cor.test(comp$Mat_SVL, comp$Mass)
+cor.test(comp_Auto$Mat_SVL, comp_Auto$Mass)
+cor.test(comp_cont$Mat_SVL, comp_cont$Mass)
+
+
+
+corr.hm=ggplot() + geom_smooth(data = comp_Auto, aes(x = Regeneration, y = Mass), color = "aquamarine4", method = "lm") +
+    geom_point(data = comp_Auto, aes(x = Regeneration, y = Mass), color = "aquamarine4") +
+  ylab('Hatchling Mass (g)') +
+  xlab('Regeneration Rate (mm/2wk)') +
+  xlim(0,17)
+
+corr.egg=ggplot() + geom_smooth(data = comp_Auto, aes(x = Mat_Mass, y = Egg_Mass), color = "aquamarine4", method = "lm") +
+    geom_point(data = comp_Auto, aes(x = Mat_Mass, y = Egg_Mass), color = "aquamarine4") +geom_smooth(data = comp_cont, aes(x = Mat_Mass, y = Egg_Mass), color = "black", method= "lm") +
+    geom_point(data = comp_cont, aes(x = Mat_Mass, y = Egg_Mass), color = "black") +
+  xlab('Maternal Mass (g)') +
+  ylab('Egg Mass (g)') +
+theme(axis.title.x = element_blank(),
+            legend.position = "none",
+            axis.text.x = element_blank())
+
+corr.hatch=ggplot() + geom_smooth(data = comp_Auto, aes(x = Mat_Mass, y = Mass), color = "aquamarine4", method = "lm") +
+    geom_point(data = comp_Auto, aes(x = Mat_Mass, y = Mass), color = "aquamarine4") +geom_smooth(data = comp_cont, aes(x = Mat_Mass, y = Mass), color = "black", method= "lm") +
+    geom_point(data = comp_cont, aes(x = Mat_Mass, y = Mass), color = "black") +
+  xlab('Maternal Mass (g)') +
+  ylab('Hatchling Mass (g)') 
+
+corr.reg=ggplot() + geom_smooth(data = comp, aes(x=Regeneration, y=Mat_Mass), color = "aquamarine4", method= "lm") + geom_point(data = comp_Auto, aes(x = Regeneration, y = Mat_Mass), color = "aquamarine4")+
+  ylab('Maternal Mass (g)') +
+  xlab('Regeneration (mm)')+
+  theme(axis.title.x = element_blank(),
+            legend.position = "none",
+            axis.text.x = element_blank())
+
+
+
+```
+
+#Addition of PCA component to regenration over total time period output
+```{r}
+PL.PC2=ggplot(data=PCA, aes(x=Treatment, y=Comp.1)) + 
+geom_boxplot() + geom_point (position=dodge) +
+  ylab('Hatchling Size (PC1)')+
+  theme(legend.position = "none",
+        axis.title.x=element_blank(),
+        axis.text.x=element_blank())
+
+anova(lme(Comp.1~Treatment,
+    data=PCA, na.action=na.omit, random=~1|MaternalID))
+
+var.test(Comp.1~Treatment,
+    data=PCA, na.action=na.omit,alternatie= "two.sided")
+    
+    
+p.1=ggdraw() +
+  draw_plot(PL.PC2, x = 0, y = 0.48, width = .5, height = 0.16) +
+  draw_plot(pl.c, x = 0, y = 0.8, width = .5, height = 0.16) +
+  draw_plot(pl.b, x = 0, y = 0.32, width = .5, height = 0.16) +
+  draw_plot(pl.d, x = 0, y = 0.16, width = .5, height = 0.16) +
+  draw_plot(pl.d2, x = 0, y = 0.64, width = .5, height = 0.16) +
+  draw_plot(pl.a, x = 0, y = 0.0, width = .5, height = 0.16) 
+##Save the image as a png file with predefined dimensions. Add the dpi value to export it as publication quality. 
+
+ggsave(p.1, file="Supp_Fig_3_overall.inv.png", width=12, height=12, dpi=300)
+
+p.1
+
+
+```
+
+
+#Figure output for paper
+```{r}
+
+p.5b=ggdraw() +
+  draw_plot(plot1b, x =0.5, y = 0.66, width = 0.4, height = 0.33) +
+  draw_plot(pl.PC, x =0.5, y = 0.33, width = 0.4, height = 0.33) +
+  draw_plot(pld2, x = 0.5, y = 0.0, width = 0.4, height = 0.33) +
+  draw_plot(PL.PC2, x = 0, y = 0.66, width = 0.4, height = .33) +
+  draw_plot(pl.d2, x = 0, y = 0.33, width = 0.4, height = .33) +
+  draw_plot(corr.hm, x = 0, y = 0.0, width = 0.4, height = .30) +
+     draw_plot_label(label = c("A", "B", "C", "D"), size = 15,
+                  x = c(-0.05, -0.05, 0.45, 0.45), y = c(0.99, 0.33, 0.99, 0.66)) + theme(plot.margin=unit(c(10,10,10,10),"mm"))
+
+
+
+##Save the image as a png file with predefined dimensions. Add the dpi value to export it as publication quality. 
+ggsave(p.5b, file="Fig_two.png", width=8, height=8, dpi=600)
+
+p.5b
+
+
+p.2=ggdraw() +
+  draw_plot(plot.SVL2, x = 0, y = 0, width = 1, height = .25) +
+  draw_plot(plot.mass2, x = 0, y = 0.25, width = 1, height = .25) +
+  draw_plot(plot.Eggmass2, x = 0, y = 0.50, width = 1, height = .25) +
+  draw_plot(plot1c, x = 0, y = 0.75, width = 1, height = .25) +
+ draw_plot_label(label = c("A", "B"), size = 15,
+                  x = c(-0.07, -0.07), y = c(0.99, 0.75)) +
+  theme(plot.margin=unit(c(10,10,10,10),"mm")) 
+
+##Save the image as a png file with predefined dimensions. Add the dpi value to export it as publication quality. 
+ggsave(p.2, file="Fig_one.png", width=4, height=8, dpi=600)
+
+p.2
+
+```
+
+#Summary for means of hatchling measures
+```{r}
+rel.egg.mean=summarySE(hatch, measurevar = "Relative.Egg", groupvars = c("Treatment", "Status"), na.rm=T)
+ rel.egg.mean
+ 
+mass.mean=summarySE(hatch, measurevar = "Mass", groupvars = c("Treatment", "Status"), na.rm=T)
+ mass.mean
+ 
+SVL.mean=summarySE(hatch, measurevar = "SVL", groupvars = c("Treatment", "Status"), na.rm=T)
+  SVL.mean
+
+```
