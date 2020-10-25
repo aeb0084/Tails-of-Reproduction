@@ -40,9 +40,6 @@ Adult A. sagrei lizards (n = 48 females, n = 54 males) were collected from <img 
 
 &nbsp; 
 
-&nbsp; 
-
-&nbsp; 
 
 
 
