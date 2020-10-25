@@ -18,7 +18,6 @@ Statistical Code                     | [Code](Regeneration_publication.code.fina
 &nbsp;                               | [Code output](Regeneration_publication.code.final.html)
 
 ## Supplemental Figures and Tables 
-<pre>
 ![Supplemental Figure 1](SFig1_Github.png)
 
 
@@ -33,7 +32,6 @@ Statistical Code                     | [Code](Regeneration_publication.code.fina
 
 ![Supplemental Table 1](STable1_Github.png) 
 
-</pre>
 
 ## Methodology: 
 
