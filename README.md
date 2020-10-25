@@ -75,5 +75,34 @@ Linear mixed models were used to test for differences in reproductive investment
 
 The statistical analyses were performed in R (version 3.5.1) using [downloadable code](Regeneration_publication.code.final.Rmd) in an R Markdown format. [Code output](Regeneration_publication.code.final.html) displays all statistical models, results, and figures produced. Note, you will have to download the HTML file to visualize the data output. 
 
+Examples of required packages, statistical models, and plots used can be seen below: 
 
-  
+```ruby
+#Required Packages
+library(multcomp)
+library(ggplot2)
+library(nlme)
+library(grid)
+library(Rmisc)
+library(gridExtra)
+library(emmeans)
+library(cowplot)
+
+#Linear Mixed Models
+#Run linear model comparing variable of interest across time including Maternal ID as a random effect variable
+model=(lme(Dependent_Variable~Independent_Variable, data=dat, na.action=na.omit, random=~1|MaternalID))
+#Run an anova output to display F-values and P-values
+anova(model)
+
+#Run EmMeans package to get pairwise comparisons of Independent Variables (Times or Treatments)
+model.emmeans=emmeans(model, list(pairwise ~ Independent_Variable), adjust = "tukey")
+#Report adjusted means and P-values
+model.emmeans
+#Report confidence intervals from EmMeans model
+confint(model.emmeans)
+
+#Graph patterns using ggplot2 package
+plot=ggplot(data=dat, aes(x=Independent_Variable, y=Dependent_Variable, fill=Independent_Variable)) + geom_violin(trim=F) + 
+geom_boxplot(width=0.2, color="black") + geom_point (position=dodge, shape=1) + scale_fill_manual(values= c('gray62','darkslategray', 'darkseagreen2')) +
+  xlab('x_IndependentVariable_Title') +
+  ylab('y_DependentVariable_Title')
