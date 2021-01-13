@@ -17,8 +17,8 @@ Statistical Code                     | [Code](Regneration_publication.code.final
 &nbsp;                               | [Code output](Regneration_publication.code.final.html)
 Supplemental Figure Downloads        | [Supplemental Figure 1](SFig1_Github.png)
 &nbsp;                               | [Supplemental Figure 2](SFig2_Github.png)
-&nbsp;                               | [Supplemental Figure 3](SFig4_Github.png)
-&nbsp;                               | [Supplemental Figure 4](SFig5_Github.png)
+&nbsp;                               | [Supplemental Figure 3](SFig3_Github.png)
+&nbsp;                               | [Supplemental Figure 4](SFig4_Github.png)
 &nbsp;                               | [Supplemental Table 1](STable1_Github.png)
 
 ## Statistical Modeling and Data: 
