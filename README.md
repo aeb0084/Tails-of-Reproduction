@@ -59,7 +59,7 @@ geom_boxplot(width=0.2, color="black") + geom_point (position=dodge, shape=1) + 
 ```
 
 ## Supplementary Figures: 
-<img src="SFig1.png" width="400">
+<img src="SFig1_Github.png" width="400">
 ![Supplemental Figure 1](SFig1_Github.png)
 ![Supplemental Figure 2](SFig2_Github.png)
 ![Supplemental Figure 3](SFig3_Github.png)
