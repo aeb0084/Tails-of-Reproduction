@@ -21,15 +21,6 @@ Supplemental Figure Downloads        | [Supplemental Figure 1](SFig1_Github.png)
 &nbsp;                               | [Supplemental Figure 4](SFig5_Github.png)
 &nbsp;                               | [Supplemental Table 1](STable1_Github.png)
 
-## Supplementary Figures: 
-
-![Supplemental Figure 1](SFig1_Github.png)
-![Supplemental Figure 2](SFig2_Github.png)
-![Supplemental Figure 3](SFig3_Github.png)
-![Supplemental Figure 4](SFig4_Github.png)
-![Supplemental Table 1](STable1_Github.png)
-
-
 ## Statistical Modeling and Data: 
 
 The statistical analyses were performed in R (version 3.5.1) using [downloadable code](Regneration_publication.code.final.Rmd) in an R Markdown format. [Code output](Regneration_publication.code.final.html) displays all statistical models, results, and figures produced. Note, you will have to download the HTML file to visualize the data output. 
@@ -66,3 +57,11 @@ geom_boxplot(width=0.2, color="black") + geom_point (position=dodge, shape=1) + 
   xlab('x_IndependentVariable_Title') +
   ylab('y_DependentVariable_Title')
 ```
+
+## Supplementary Figures: 
+
+![Supplemental Figure 1](SFig1_Github.png)
+![Supplemental Figure 2](SFig2_Github.png)
+![Supplemental Figure 3](SFig3_Github.png)
+![Supplemental Figure 4](SFig4_Github.png)
+![Supplemental Table 1](STable1_Github.png)
