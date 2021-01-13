@@ -24,9 +24,9 @@ Supplemental Figure Downloads        | [Supplemental Figure 1](SFig1_Github.png)
 ## Supplementary Figures: 
 
 <img align="left" src="SFig1_Github.png" width="350"> 
-<img align="right" src="SFig4_Github.png" width="550"> 
+<img align="left" src="SFig4_Github.png" width="550"> 
 <img align="left" src="STable1_Github.png" width="450"> 
-<img align="right" src="SFig5_Github.png" width="450">
+<img align="left" src="SFig5_Github.png" width="450">
 
 
 ## Statistical Modeling and Data: 
