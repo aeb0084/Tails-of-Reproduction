@@ -23,7 +23,7 @@ Supplemental Figure Downloads        | [Supplemental Figure 1](SFig1_Github.png)
 
 ## Supplementary Figures: 
 
-<src="SFig1_Github.png" width="350"> 
+![Supplemental Figure 1](SFig1_Github.png)
 
 <src="SFig4_Github.png" width="550"> 
 
