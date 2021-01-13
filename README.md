@@ -59,9 +59,8 @@ geom_boxplot(width=0.2, color="black") + geom_point (position=dodge, shape=1) + 
 ```
 
 ## Supplementary Figures: 
-<img src="SFig1_Github.png" width="400">
-![Supplemental Figure 1](SFig1_Github.png)
-![Supplemental Figure 2](SFig2_Github.png)
-![Supplemental Figure 3](SFig3_Github.png)
-![Supplemental Figure 4](SFig4_Github.png)
-![Supplemental Table 1](STable1_Github.png)
+<img src="SFig1_Github.png" width="700">
+<img src="SFig2_Github.png" width="700">
+<img src="SFig3_Github.png" width="700">
+<img src="SFig4_Github.png" width="700">
+<img src="STable1_Github.png" width="700">
