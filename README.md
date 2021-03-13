@@ -61,6 +61,6 @@ geom_boxplot(width=0.2, color="black") + geom_point (position=dodge, shape=1) + 
 ## Supplementary Figures: 
 <img src="SFig1_Github.png" width="700">
 <img src="SFig2_Github.png" width="500">
-<img src="SFig3_Github.png" width="500">
+<img src="SFig3_Github.png" width="450">
 <img src="SFig4_Github.png" width="700">
 <img src="STable1_Github.png" width="600">
