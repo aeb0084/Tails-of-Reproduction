@@ -17,7 +17,7 @@ Statistical Code                     | [Code](Regneration_publication.code.final
 &nbsp;                               | [Code output](Regneration_publication.code.final.html)
 Supplemental Figure Downloads        | [Supplemental Figure 1](SFig1_Github.png)
 &nbsp;                               | [Supplemental Figure 2](SFig2_Github.png)
-&nbsp;                               | [Supplemental Figure 3](SFig3_Github.png)
+&nbsp;                               | [Supplemental Figure 3](SFig3_Github2.png)
 &nbsp;                               | [Supplemental Figure 4](SFig4_Github.png)
 &nbsp;                               | [Supplemental Table 1](STable1_Github.png)
 
@@ -61,6 +61,6 @@ geom_boxplot(width=0.2, color="black") + geom_point (position=dodge, shape=1) + 
 ## Supplementary Figures: 
 <img src="SFig1_Github.png" width="700">
 <img src="SFig2_Github.png" width="500">
-<img src="SFig3_Github.png" width="450">
+<img src="SFig3_Github2.png" width="450">
 <img src="SFig4_Github.png" width="700">
 <img src="STable1_Github.png" width="600">
